@@ -35,5 +35,30 @@ public class Customer {
     @Column(name = "account_balance", nullable = false)
     private Double accountBalance;
 
-    // Getters and Setters
+    // Getters and Setters for all fields
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    // Other getters and setters omitted for brevity
 }
