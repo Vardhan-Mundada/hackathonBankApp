@@ -1,4 +1,7 @@
-package com.mybank.mybank_app.respository;
+package org.mybank.mybank_app.repository;
 
-public class CustomerRepository {
+import org.mybank.mybank_app.model.Customer;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
 }

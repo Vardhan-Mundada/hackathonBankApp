@@ -29,5 +29,11 @@ public class Customer {
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
+    @Column(name = "account_number", nullable = false, unique = true)
+    private String accountNumber;
+
+    @Column(name = "account_balance", nullable = false)
+    private Double accountBalance;
+
     // Getters and Setters
 }
