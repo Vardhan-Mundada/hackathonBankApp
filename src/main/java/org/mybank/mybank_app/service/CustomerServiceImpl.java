@@ -1,14 +1,14 @@
 package org.mybank.mybank_app.service;
 
 import org.mybank.mybank_app.model.Customer;
-import org.mybank.mybank_app.repository.CustomerRepository;
+import org.mybank.mybank_app.respository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class CustomerServiceImpl implements CustomerService {
+public class CustomerServiceImpl implements org.mybank.mybank_app.service.CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 

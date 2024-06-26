@@ -1,4 +1,4 @@
-package org.mybank.mybank_app.repository;
+package org.mybank.mybank_app.respository;
 
 import org.mybank.mybank_app.model.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
