@@ -24,20 +24,60 @@ public class AccountService {
 	}
 
 	public int getBalance(int acctID) {
-		return accountRepository.findBalanceByAcctID(acctID);
+		Accounts acct = getAccountInfo(acctID);
+		return (acct != null) ? acct.getBalance() : 0;
 	}
 
 	public void depositAmount(int acctID, int amount) {
-		accountRepository.saveBalanceByAcctID(acctID, amount);
+		Accounts acct = getAccountInfo(acctID);
+		if (acct != null) {
+			acct.deposit(amount);
+			accountRepository.save(acct);
+		}
 	}
 
 	public void withdrawAmount(int acctID, int amount) {
-		accountRepository.withdrawAmountByAcctID(acctID, amount);
+		Accounts acct = getAccountInfo(acctID);
+		if (acct != null) {
+			acct.withdraw(amount);
+			accountRepository.save(acct);
+		}
 	}
 
 	public void transferAmount(int acctID, int destAcctID, int amount) {
-		accountRepository.withdrawAmountByAcctID(acctID, amount);
-		accountRepository.saveBalanceByAcctID(destAcctID, amount);
+		Accounts sourceAcct = getAccountInfo(acctID);
+		Accounts destAcct = getAccountInfo(destAcctID);
+		if (sourceAcct != null && destAcct != null) {
+			sourceAcct.transfer(destAcct, amount);
+			accountRepository.save(sourceAcct);
+			accountRepository.save(destAcct);
+		}
 	}
 
+	public void activateAccount(int acctID) {
+		Accounts acct = getAccountInfo(acctID);
+		if (acct != null) {
+			acct.activate();
+			accountRepository.save(acct);
+		}
+	}
+
+	public void deactivateAccount(int acctID) {
+		Accounts acct = getAccountInfo(acctID);
+		if (acct != null) {
+			acct.deactivate();
+			accountRepository.save(acct);
+		}
+	}
+
+	public void updateAccountInfo(int acctID, String accountHolderName, String accountType, String branch, double interestRate) {
+		Accounts acct = getAccountInfo(acctID);
+		if (acct != null) {
+			acct.setAccountHolderName(accountHolderName);
+			acct.setAccountType(accountType);
+			acct.setBranch(branch);
+			acct.setInterestRate(interestRate);
+			accountRepository.save(acct);
+		}
+	}
 }
