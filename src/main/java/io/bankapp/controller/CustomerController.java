@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import io.bankapp.model.Customer;
 import io.bankapp.service.CustomerService;
 
+import java.util.Date;
+
 @RestController
 public class CustomerController {
 	@Autowired
@@ -21,7 +23,7 @@ public class CustomerController {
 	@PostMapping("/customer")
 	public void createCustomer(@RequestBody Customer customer) {
 		customerService.createCustomer(customer);
-		accountController.createAccount(customer.getAcctID(), 0, "Active");
+		accountController.createAccount(customer.getAcctID(), 0, "Active", customer.getCustName(), "Saving", new Date(), new Date(), "Pune", 6.0  );
 	}
 
 	@GetMapping("/customer/{acctID}")

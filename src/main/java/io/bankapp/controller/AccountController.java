@@ -1,14 +1,13 @@
 package io.bankapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import io.bankapp.model.Accounts;
 import io.bankapp.model.Logger;
 import io.bankapp.service.AccountService;
+
+import java.util.Date;
 
 @RestController
 public class AccountController {
@@ -18,8 +17,12 @@ public class AccountController {
 	private LoggerController loggerController;
 
 	// createAccount happens upon createCustomer
-	public void createAccount(int acctID, int balance, String acctStatus) {
-		Accounts acct = new Accounts(acctID, balance, acctStatus);
+	@PostMapping("/account/create")
+	public void createAccount(@RequestParam int acctID, @RequestParam int balance, @RequestParam String acctStatus,
+							  @RequestParam String accountHolderName, @RequestParam String accountType,
+							  @RequestParam Date createdDate, @RequestParam Date lastUpdatedDate,
+							  @RequestParam String branch, @RequestParam double interestRate) {
+		Accounts acct = new Accounts(acctID, balance, acctStatus, accountHolderName, accountType, createdDate, lastUpdatedDate, branch, interestRate);
 		accountService.createAccount(acct);
 	}
 
@@ -55,7 +58,8 @@ public class AccountController {
 		accountService.transferAmount(acctID, destAcctID, amount);
 		Logger loggerSender = new Logger(acctID, "Transferred", "Success", initBalSender, initBalSender - amount);
 		loggerController.addLog(loggerSender);
-		Logger loggerReceiver = new Logger(destAcctID, "Received", "Success", initBalReceiver, initBalReceiver + amount);
+		Logger loggerReceiver = new Logger(destAcctID, "Received", "Success", initBalReceiver,
+				initBalReceiver + amount);
 		loggerController.addLog(loggerReceiver);
 	}
 
@@ -63,7 +67,7 @@ public class AccountController {
 	@DeleteMapping("/account/{acctID}")
 	public void deleteAccount(@PathVariable int acctID) {
 		accountService.deleteAccount(acctID);
-		loggerController.deleteLogsByAccountId(acctID); // This will need to be updated to delete logs by account ID
+		loggerController.deleteLogsByAccountId(acctID);
 	}
 
 	// getAccountInfo
@@ -71,4 +75,5 @@ public class AccountController {
 	public Accounts getAccountInfo(@PathVariable int acctID) {
 		return accountService.getAccountInfo(acctID);
 	}
+
 }
