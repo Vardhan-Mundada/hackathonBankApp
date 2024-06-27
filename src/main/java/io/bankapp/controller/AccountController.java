@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import io.bankapp.model.Accounts;
 import io.bankapp.model.Logger;
 import io.bankapp.service.AccountService;
@@ -56,8 +55,7 @@ public class AccountController {
 		accountService.transferAmount(acctID, destAcctID, amount);
 		Logger loggerSender = new Logger(acctID, "Transferred", "Success", initBalSender, initBalSender - amount);
 		loggerController.addLog(loggerSender);
-		Logger loggerReceiver = new Logger(destAcctID, "Received", "Success", initBalReceiver,
-				initBalReceiver + amount);
+		Logger loggerReceiver = new Logger(destAcctID, "Received", "Success", initBalReceiver, initBalReceiver + amount);
 		loggerController.addLog(loggerReceiver);
 	}
 
@@ -65,7 +63,7 @@ public class AccountController {
 	@DeleteMapping("/account/{acctID}")
 	public void deleteAccount(@PathVariable int acctID) {
 		accountService.deleteAccount(acctID);
-		loggerController.deleteLog(acctID);
+		loggerController.deleteLogsByAccountId(acctID); // This will need to be updated to delete logs by account ID
 	}
 
 	// getAccountInfo
@@ -73,5 +71,4 @@ public class AccountController {
 	public Accounts getAccountInfo(@PathVariable int acctID) {
 		return accountService.getAccountInfo(acctID);
 	}
-
 }

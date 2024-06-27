@@ -1,23 +1,16 @@
 package io.bankapp.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-//@Embeddable
-//class LoggerPk {
-//	@Column(name="acctID")
-//	public int acctID;
-//	
-//	@ManyToOne
-//	@JoinColumn(name="Account_ID")
-//	private Accounts acct;
-//}
 
 @Entity
 public class Logger {
-//	@EmbeddedId
-//	private LoggerPk id; 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int logID;
+
 	private int acctID;
 	private String transacType;
 	private String transacStatus;
@@ -25,16 +18,22 @@ public class Logger {
 	private int finalBal;
 
 	public Logger() {
-
 	}
 
 	public Logger(int acctID, String transacType, String transacStatus, int initBal, int finalBal) {
-		super();
 		this.acctID = acctID;
 		this.transacType = transacType;
 		this.transacStatus = transacStatus;
 		this.initBal = initBal;
 		this.finalBal = finalBal;
+	}
+
+	public int getLogID() {
+		return logID;
+	}
+
+	public void setLogID(int logID) {
+		this.logID = logID;
 	}
 
 	public int getAcctID() {
@@ -76,5 +75,4 @@ public class Logger {
 	public void setFinalBal(int finalBal) {
 		this.finalBal = finalBal;
 	}
-
 }
