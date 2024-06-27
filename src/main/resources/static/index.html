@@ -215,7 +215,7 @@
                     logs.forEach(log => {
                         var logItem = document.createElement('div');
                         logItem.classList.add('log-item');
-                        logItem.textContent = `Log ID: ${log.logID}, Action: ${log.action}, Status: ${log.status}`;
+                        logItem.textContent = `Log ID: ${log.logID}, Action: ${log.transacType}, Status: ${log.transacStatus}`;
                         logsContainer.appendChild(logItem);
                     });
                 })
