@@ -141,8 +141,95 @@
     <div id="logsContainer" class="logs-container">
         <!-- Logs will be dynamically added here -->
     </div>
+    <h2>Create Customer</h2>
+    <form id="createCustomerForm">
+        <input type="text" id="acctID" placeholder="Account ID">
+        <input type="text" id="custName" placeholder="Customer Name">
+        <input type="text" id="city" placeholder="City">
+        <input type="text" id="state" placeholder="State"><br>
+        <input type="text" id="country" placeholder="Country">
+        <input type="text" id="phoneNo" placeholder="Phone Number">
+        <input type="password" id="password" placeholder="Password">
+        <button type="button" onclick="createCustomer()">Create Customer</button>
+    </form>
+
+    <h2>Get Customer Info</h2>
+    <form id="getCustomerInfoForm">
+        <input type="text" id="getCustomerInfoAcctID" placeholder="Account ID">
+        <button type="button" onclick="getCustomerInfo()">Get Customer Info</button>
+    </form>
+
+    <h2>Delete Customer</h2>
+    <form id="deleteCustomerForm">
+        <input type="text" id="deleteCustomerAcctID" placeholder="Account ID">
+        <button type="button" onclick="deleteCustomer()">Delete Customer</button>
+    </form>
+
+    <h2>Show Account Logs</h2>
+    <button type="button" onclick="showAccountLogs()">Show Account Logs</button>
+    <div id="logsContainer" class="logs-container">
+        <!-- Logs will be dynamically added here -->
+    </div>
 
     <script>
+        function toggleTheme() {
+            var body = document.body;
+            body.classList.toggle('light-mode'); // Toggle light-mode class on body
+        }
+
+        function createCustomer() {
+            var acctID = document.getElementById('acctID').value;
+            var custName = document.getElementById('custName').value;
+            var city = document.getElementById('city').value;
+            var state = document.getElementById('state').value;
+            var country = document.getElementById('country').value;
+            var phoneNo = document.getElementById('phoneNo').value;
+            var password = document.getElementById('password').value;
+            
+            var customer = {
+                acctID: acctID,
+                custName: custName,
+                city: city,
+                state: state,
+                country: country,
+                phoneNo: phoneNo,
+                password: password
+            };
+
+            fetch('http://localhost:8081/customer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(customer)
+            })
+            .then(() => alert('Customer created successfully'))
+            .catch(error => console.error('Error creating customer:', error));
+        }
+
+        function getCustomerInfo() {
+            var acctID = document.getElementById('getCustomerInfoAcctID').value;
+            fetch('http://localhost:8081/customer/' + acctID)
+                .then(response => response.json())
+                .then(customer => {
+                    alert('Customer Info:\n' +
+                        'Account ID: ' + customer.acctID + '\n' +
+                        'Customer Name: ' + customer.custName + '\n' +
+                        'City: ' + customer.city + '\n' +
+                        'State: ' + customer.state + '\n' +
+                        'Country: ' + customer.country + '\n' +
+                        'Phone Number: ' + customer.phoneNo);
+                })
+                .catch(error => console.error('Error fetching customer info:', error));
+        }
+
+        function deleteCustomer() {
+            var acctID = document.getElementById('deleteCustomerAcctID').value;
+            fetch('http://localhost:8081/customer/' + acctID, { method: 'DELETE' })
+                .then(() => alert('Customer deleted successfully'))
+                .catch(error => console.error('Error deleting customer:', error));
+        }
+
         function toggleTheme() {
             var body = document.body;
             body.classList.toggle('light-mode'); // Toggle light-mode class on body
