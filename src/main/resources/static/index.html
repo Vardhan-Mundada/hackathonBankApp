@@ -11,26 +11,22 @@
             color: #ecf0f1; /* Light text color */
             padding: 20px;
             transition: background-color 0.3s ease;
+            position: relative;
         }
         h1, h2 {
             color: #3498db; /* Blue headings */
         }
-        form {
-            margin-bottom: 20px;
+        .container {
+            text-align: center;
         }
-        input, select {
-            margin-bottom: 10px;
-            padding: 8px;
-            width: 200px;
-            background-color: #34495e; /* Dark input background */
-            border: 1px solid #2980b9; /* Blue border */
-            color: #ecf0f1; /* Light text color */
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        .text-centre {
+            text-align: center;
         }
-        input:focus, select:focus {
-            outline: none;
-            border-color: #3498db; /* Lighter blue border on focus */
-            box-shadow: 0 0 5px #3498db; /* Lighter blue shadow on focus */
+        .text-white {
+            color: #ecf0f1;
+        }
+        .bg-cover {
+            background-size: cover;
         }
         button {
             padding: 10px 20px;
@@ -43,184 +39,29 @@
         button:hover {
             background-color: #2980b9; /* Darker blue on hover */
         }
-        button:focus {
-            outline: none;
-        }
-        .logs-container {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #2c3e50; /* Dark background */
-            color: #ecf0f1; /* Light text color */
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-        .log-item {
-            margin-bottom: 5px;
-            padding: 5px;
-            border: 1px solid #3498db; /* Blue border for each log item */
-            border-radius: 3px;
-            transition: border-color 0.3s ease;
-        }
-        .log-item:hover {
-            border-color: #2980b9; /* Darker blue border on hover */
-        }
-
-        body.light-mode {
-            background-color: #ecf0f1; /* Light background color */
-            color: #2c3e50; /* Dark text color */
-        }
-        body.light-mode input, 
-        body.light-mode select, 
-        body.light-mode .logs-container, 
-        body.light-mode .log-item {
-            background-color: #f2f2f2; /* Light input and container background */
-            border: 1px solid #3498db; /* Light blue border */
-            color: #2c3e50; /* Dark text color */
-        }
-        body.light-mode input:focus, 
-        body.light-mode select:focus {
-            border-color: #2980b9; /* Darker blue border on focus */
-            box-shadow: 0 0 5px #2980b9; /* Darker blue shadow on focus */
-        }
-        body.light-mode button {
-            background-color: #3498db; /* Blue button background */
-            color: #ecf0f1; /* Light text color */
-        }
-        body.light-mode button:hover {
-            background-color: #2980b9; /* Darker blue on hover */
+        .services-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
         }
     </style>
 </head>
 <body>
-    <h1>Banking Application</h1>
-
-    <button onclick="toggleTheme()">Toggle Theme</button>
-
-    <h2>Get Account Balance</h2>
-    <form id="getBalanceForm">
-        <input type="text" id="getBalanceAcctID" placeholder="Account ID">
-        <button type="button" onclick="getBalance()">Get Balance</button>
-    </form>
-
-    <h2>Deposit Amount</h2>
-    <form id="depositForm">
-        <input type="text" id="depositAcctID" placeholder="Account ID">
-        <input type="text" id="depositAmount" placeholder="Amount">
-        <button type="button" onclick="deposit()">Deposit</button>
-    </form>
-
-    <h2>Withdraw Amount</h2>
-    <form id="withdrawForm">
-        <input type="text" id="withdrawAcctID" placeholder="Account ID">
-        <input type="text" id="withdrawAmount" placeholder="Amount">
-        <button type="button" onclick="withdraw()">Withdraw</button>
-    </form>
-
-    <h2>Transfer Amount</h2>
-    <form id="transferForm">
-        <input type="text" id="transferFromAcctID" placeholder="From Account ID">
-        <input type="text" id="transferToAcctID" placeholder="To Account ID">
-        <input type="text" id="transferAmount" placeholder="Amount">
-        <button type="button" onclick="transfer()">Transfer</button>
-    </form>
-
-    <h2>Delete Account</h2>
-    <form id="deleteForm">
-        <input type="text" id="deleteAcctID" placeholder="Account ID">
-        <button type="button" onclick="deleteAccount()">Delete Account</button>
-    </form>
-
-    <h2>Get Account Info</h2>
-    <form id="getInfoForm">
-        <input type="text" id="getInfoAcctID" placeholder="Account ID">
-        <button type="button" onclick="getAccountInfo()">Get Account Info</button>
-    </form>
-
-    <h2>Show Account Logs</h2>
-    <button type="button" onclick="showAccountLogs()">Show Account Logs</button>
-    <div id="logsContainer" class="logs-container">
-        <!-- Logs will be dynamically added here -->
+<section>
+    <app-header></app-header>
+    <br><br>
+    <!-- Body div container 1 -->
+    <div class="container" style="object-fit: cover;">
+        <h2 class="text-centre">Retail Banking System: Banking For All</h2>
     </div>
-
-    <script>
-        function toggleTheme() {
-            var body = document.body;
-            body.classList.toggle('light-mode'); // Toggle light-mode class on body
-        }
-
-        function getBalance() {
-            var acctID = document.getElementById('getBalanceAcctID').value;
-            fetch('http://localhost:8081/account/' + acctID + '/balance')
-                .then(response => response.text())
-                .then(balance => alert('Balance: ' + balance))
-                .catch(error => console.error('Error fetching balance:', error));
-        }
-
-        function deposit() {
-            var acctID = document.getElementById('depositAcctID').value;
-            var amount = document.getElementById('depositAmount').value;
-            fetch('http://localhost:8081/account/' + acctID + '/deposit/' + amount, { method: 'PUT' })
-                .then(() => alert('Amount deposited successfully'))
-                .catch(error => console.error('Error depositing amount:', error));
-        }
-
-        function withdraw() {
-            var acctID = document.getElementById('withdrawAcctID').value;
-            var amount = document.getElementById('withdrawAmount').value;
-            fetch('http://localhost:8081/account/' + acctID + '/withdraw/' + amount, { method: 'PUT' })
-                .then(() => alert('Amount withdrawn successfully'))
-                .catch(error => console.error('Error withdrawing amount:', error));
-        }
-
-        function transfer() {
-            var fromAcctID = document.getElementById('transferFromAcctID').value;
-            var toAcctID = document.getElementById('transferToAcctID').value;
-            var amount = document.getElementById('transferAmount').value;
-            fetch('http://localhost:8081/account/' + fromAcctID + '/transfer/' + toAcctID + '/' + amount, { method: 'PUT' })
-                .then(() => alert('Amount transferred successfully'))
-                .catch(error => console.error('Error transferring amount:', error));
-        }
-
-        function deleteAccount() {
-            var acctID = document.getElementById('deleteAcctID').value;
-            fetch('http://localhost:8081/account/' + acctID, { method: 'DELETE' })
-                .then(() => alert('Account deleted successfully'))
-                .catch(error => console.error('Error deleting account:', error));
-        }
-
-        function getAccountInfo() {
-            var acctID = document.getElementById('getInfoAcctID').value;
-            fetch('http://localhost:8081/account/' + acctID)
-                .then(response => response.json())
-                .then(account => {
-                    alert('Account Info:\n' +
-                        'Account ID: ' + account.acctID + '\n' +
-                        'Balance: ' + account.balance + '\n' +
-                        'Status: ' + account.acctStatus + '\n' +
-                        'Holder Name: ' + account.accountHolderName + '\n' +
-                        'Account Type: ' + account.accountType + '\n' +
-                        'Branch: ' + account.branch + '\n' +
-                        'Interest Rate: ' + account.interestRate);
-                })
-                .catch(error => console.error('Error fetching account info:', error));
-        }
-
-        function showAccountLogs() {
-            var acctID = document.getElementById('getBalanceAcctID').value; // Use the same input for simplicity
-            fetch('http://localhost:8081/account/' + acctID + '/logs')
-                .then(response => response.json())
-                .then(logs => {
-                    var logsContainer = document.getElementById('logsContainer');
-                    logsContainer.innerHTML = ''; // Clear previous logs
-                    logs.forEach(log => {
-                        var logItem = document.createElement('div');
-                        logItem.classList.add('log-item');
-                        logItem.textContent = `Log ID: ${log.logID}, Action: ${log.transacType}, Status: ${log.transacStatus}`;
-                        logsContainer.appendChild(logItem);
-                    });
-                })
-                .catch(error => console.error('Error fetching logs:', error));
-        }
-    </script>
+    <br>
+    <div class="container text-white" style="object-fit: cover;">
+        <div class="jumbotron bg-cover" style="background-image: url('assets/images/dashboard.webp'); background-repeat: no-repeat; background-size: 1120px 626px; width: 1120px; height: 626px;"></div>
+    </div>
+    <br>
+    <div class="services-button">
+        <button onclick="location.href='services.html'">Services</button>
+    </div>
+</section>
 </body>
 </html>

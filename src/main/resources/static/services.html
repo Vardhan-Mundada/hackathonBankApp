@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banking Services</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2c3e50; /* Dark background color */
+            color: #ecf0f1; /* Light text color */
+            padding: 20px;
+            transition: background-color 0.3s ease;
+        }
+        h1{
+            color: #ffffff;
+            text-align: center;
+        }
+        h2 {
+            color: #3498db; /* Blue headings */
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .service-card {
+            background-color: #34495e;
+            border: 1px solid #2980b9;
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            position: relative;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+        .service-image {
+            width: 200px; /* Adjust as needed */
+            height: 150px; /* Adjust as needed */
+            border-radius: 10px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+        .service-name {
+            color: #ecf0f1;
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+        .service-description {
+            font-size: 1em;
+            margin-bottom: 30px;
+        }
+        .service-separator {
+            width: 80%;
+            height: 1px;
+            background-color: #2980b9;
+            margin-bottom: 10px;
+        }
+        .service-button {
+            background-color: #3498db;
+            color: #ecf0f1;
+            border: none;
+            border-radius:5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            position: absolute;
+            bottom: 5px; /* Adjust as needed */
+            right: 10px; /* Adjust as needed */
+            transition: background-color 0.3s ease;
+        }
+        .service-button:hover {
+            background-color: #2980b9;
+        }
+
+
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            padding-top: 60px;
+        }
+        .modal-content {
+            color:black;
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            max-width: 500px;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .form-input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 10px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    white-space: normal; /* Allow text wrapping */
+}
+
+        .form-button {
+            width: 100%;
+            background-color: #3498db;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-button:hover {
+            background-color: #2980b9;
+        }
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+        }
+        /* Target only the transfer service section */
+.transfer-service .service-description {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.transfer-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.transfer-group label {
+    width: 150px;
+    margin-right: 10px;
+}
+
+.transfer-group input {
+    flex-grow: 1;
+    width: 170px;
+}
+
+    </style>
+</head>
+
+<body>
+<h1>Welcome to Retail Banking System</h1>
+<h2>Our Services</h2>
+<div class="container">
+
+    <div class="service-card">
+        <img src="assets/images/createCustomer.jpg" alt="Create Customer" class="service-image">
+        <div class="service-name">Create Customer</div>
+        <div class="service-separator"></div>
+        <div class="service-description">Create a new customer account.</div>
+        <button class="service-button" onclick="openModal()">Create Customer</button>
+    </div>
+    <div class="service-card">
+        <img src="assets/images/balance.png" alt="Balance Inquiry" class="service-image">
+        <div class="service-name">Balance Inquiry</div>
+        <div class="service-separator"></div>
+        <div class="service-description">
+            <label for="balanceAcctID" style="display: inline-block;">Account ID:</label>
+            <input type="text" id="balanceAcctID" class="form-input" placeholder="Enter Account ID" style="display: inline-block; width: 150px;">
+        </div>
+        <button class="service-button" onclick="getBalance()">Get Balance</button>
+    </div>
+    <div class="service-card">
+        <img src="assets/images/deposit.jpg" alt="Deposit Amount" class="service-image">
+        <div class="service-name">Deposit Amount</div>
+        <div class="service-separator"></div>
+        <div class="service-description">
+            <label for="depositAccID" style="display: inline-block;">Account ID:</label>
+            <input type="text" id="depositAccID" class="form-input" placeholder="Enter Account ID" style="display: inline-block; width: 150px;">
+            <label for="depositAmt">Amount(&#8377):</label>
+            <input type="text" id="depositAmt" class="form-input" placeholder="Enter the Amount" min="0" style="width: 150px;">
+        </div>
+        <button class="service-button" onclick="deposit()">Deposit</button>
+    </div>
+    <div class="service-card">
+        <img src="assets/images/withdraw2.jpg" alt="Withdraw Amount" class="service-image">
+        <div class="service-name">Withdraw Amount</div>
+        <div class="service-separator"></div>
+        <div class="service-description">
+            <label for="withdrawacctID" style="display: inline-block;">Account ID:</label>
+            <input type="text" id="withdrawacctID" class="form-input" placeholder="Enter Account ID" style="display: inline-block; width: 150px;">
+            <label for="withdrawAmt">Amount(&#8377):</label>
+            <input type="text" id="withdrawAmt" class="form-input" placeholder="Enter the Amount" min="0" style="width: 150px;">
+        </div>
+        <button class="service-button" onclick="withdraw()">Withdraw</button>
+    </div>
+
+    <div class="service-card transfer-service">
+        <img src="assets/images/transfer.jpg" alt="Transfer Amount" class="service-image">
+        <div class="service-name">Transfer Amount</div>
+        <div class="service-separator"></div>
+        <div class="service-description">
+            <div class="transfer-group">
+                <label for="fromacctID">From Account ID:</label>
+                <input type="text" id="fromacctID" class="form-input" placeholder="Enter from Account ID">
+            </div>
+            <div class="transfer-group">
+                <label for="toacctID">To Account ID:</label>
+                <input type="text" id="toacctID" class="form-input" placeholder="Enter to Account ID">
+            </div>
+            <div class="transfer-group">
+                <label for="transferAmt">Transfer Amount(&#8377):</label>
+                <input type="text" id="transferAmt" class="form-input" placeholder="Enter Amount to Transfer" min="0">
+            </div>
+        </div>
+        <button class="service-button" onclick="transfer()">Transfer</button>
+    </div>
+
+
+    <div class="service-card">
+        <img src="assets/images/deleteaccount.png" alt="Delete Account" class="service-image">
+        <div class="service-name">Delete Account</div>
+        <div class="service-separator"></div>
+        <div class="service-description">
+            <label for="deleteacctID" style="display: inline-block;">Account ID:</label>
+            <input type="text" id="deleteacctID" class="form-input" placeholder="Enter Account ID to delete" style="display: inline-block; width: 180px;">
+        </div>
+        <button class="service-button" onclick="deleteAccount()">Delete Account</button>
+    </div>
+    <div class="service-card">
+        <img src="assets/images/accountinfo.png" alt="Get Account Info" class="service-image">
+        <div class="service-name">Get Account Info</div>
+        <div class="service-separator"></div>
+        <div class="service-description">
+            <label for="infoacctID" style="display: inline-block;">Account ID:</label>
+            <input type="text" id="infoacctID" class="form-input" placeholder="Enter Account ID" style="display: inline-block; width: 180px;">
+        </div>
+        <button class="service-button" onclick="getAccountInfo()">Get Account Info</button>
+    </div>
+    <div class="service-card">
+        <img src="assets/images/custinfo.png" alt="Get Customer Info" class="service-image">
+        <div class="service-name">Get Customer Info</div>
+        <div class="service-separator"></div>
+        <div class="service-description">
+            <label for="custinfoacctID" style="display: inline-block;">Account ID:</label>
+            <input type="text" id="custinfoacctID" class="form-input" placeholder="Enter Account ID" style="display: inline-block; width: 180px;">
+        </div>
+        <button class="service-button" onclick="getCustomerInfo()">Get Customer Info</button>
+    </div>
+    <div class="service-card">
+        <img src="assets/images/deletecust.png" alt="Delete Customer" class="service-image">
+        <div class="service-name">Delete Customer</div>
+        <div class="service-separator"></div>
+        <div class="service-description">
+            <label for="custdelacctID" style="display: inline-block;">Account ID:</label>
+            <input type="text" id="custdelacctID" class="form-input" placeholder="Enter Account ID to delete" style="display: inline-block; width: 180px;">
+        </div>
+        <button class="service-button" onclick="deleteCustomer()">Delete Customer</button>
+    </div>
+    <div class="service-card">
+        <img src="assets/images/accountlogs.jpg" alt="Show Account Logs" class="service-image">
+        <div class="service-name">Show Account Logs</div>
+        <div class="service-separator"></div>
+        <div class="service-description">
+            <label for="logacctID" style="display: inline-block;">Account ID:</label>
+            <input type="text" id="logacctID" class="form-input" placeholder="Enter Account ID" style="display: inline-block; width: 180px;">
+        </div>
+        <button class="service-button" onclick="showAccountLogs()">Show Account Logs</button>
+        <div id="logsContainer" class="logs-container">
+            <!-- Logs will be dynamically added here -->
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Create Customer</h2>
+        <div class="error-message" id="error-message"></div>
+        <form id="customerForm">
+            <label for="acctID">Account ID</label>
+            <input type="number" id="acctID" name="acctID" class="form-input" required>
+
+            <label for="custName">Customer Name</label>
+            <input type="text" id="custName" name="custName" class="form-input" required>
+
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" class="form-input" required>
+
+            <label for="state">State</label>
+            <input type="text" id="state" name="state" class="form-input" required>
+
+            <label for="country">Country</label>
+            <input type="text" id="country" name="country" class="form-input" required>
+
+            <label for="phoneNo">Phone Number</label>
+            <input type="tel" id="phoneNo" name="phoneNo" class="form-input" required pattern="[0-9]{10}">
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-input" required>
+
+            <button type="button" class="form-button" onclick="submitCustomerForm()">Submit</button>
+        </form>
+    </div>
+</div>
+<script>
+    function openModal() {
+        document.getElementById("myModal").style.display = "block";
+    }
+
+    // Function to close the modal
+    function closeModal() {
+        document.getElementById("myModal").style.display = "none";
+        document.getElementById("error-message").innerHTML = ""; // Clear error message
+    }
+
+    function submitCustomerForm() {
+    const acctID = document.getElementById("acctID").value;
+    const custName = document.getElementById("custName").value;
+    const city = document.getElementById("city").value;
+    const state = document.getElementById("state").value;
+    const country = document.getElementById("country").value;
+    let phoneNo = document.getElementById("phoneNo").value; // Get phone number as string
+    const password = document.getElementById("password").value;
+
+    // Validate if any field is empty
+    if (!acctID || !custName || !city || !state || !country || !phoneNo || !password) {
+        document.getElementById("error-message").innerHTML = "All fields are required.";
+        return;
+    }
+
+    // Validate phone number format (digits only and exactly 10 digits)
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(phoneNo)) {
+        document.getElementById("error-message").innerHTML = "Phone number must be 10 digits and contain only numbers.";
+        return;
+    }
+
+    // Convert phoneNo to number format (if it was modified by any non-numeric value)
+    phoneNo = parseInt(phoneNo);
+
+    // Check if account ID already exists
+    fetch(`http://localhost:8081/customer/${acctID}`)
+        .then(response => {
+            if (response.status === 200 && response.headers.get('content-length') === '0') {
+                // Account ID doesn't exist, proceed to create customer
+                const customerData = {
+                    acctID,
+                    custName,
+                    city,
+                    state,
+                    country,
+                    phoneNo,
+                    password
+                };
+
+                return fetch('http://localhost:8081/customer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(customerData)
+                });
+            } else if (response.status === 200 && response.headers.get('content-length') !== '0') {
+                // Account ID exists, handle error
+                throw new Error("Account ID already exists.");
+            } else {
+                throw new Error("Error checking account ID existence.");
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                displayRes('Customer created successfully');
+                closeModal();
+                // Clear form fields after successful submission
+                document.getElementById("customerForm").reset();
+            } else {
+                // Handle server error response
+                return response.text().then(errorMessage => {
+                    throw new Error(errorMessage);
+                });
+            }
+        })
+        .catch(error => {
+            document.getElementById("error-message").innerHTML = error.message;
+        });
+}
+
+    // Function to display result
+    function displayRes(message) {
+        alert(message);
+    }
+let popupDisplayed = false; // Flag to track if a popup is already displayed
+
+function getBalance() {
+    var balanceAcctID = document.getElementById("balanceAcctID").value.trim();
+
+    if (balanceAcctID === "") {
+        displayPopup("Please enter a valid Account ID");
+        return;
+    }
+
+    fetch(`http://localhost:8081/account/${balanceAcctID}`)
+        .then(response => {
+            if (response.status === 200) {
+                return response.text().then(body => {
+                    if (body.length === 0) {
+                        // Account ID does not exist
+                        if (!popupDisplayed) {
+                            displayPopup("Account ID does not exist.");
+                            popupDisplayed = true; // Set flag to true
+                        }
+                        throw new Error("Account ID does not exist.");
+                    } else {
+                        // Account ID exists, proceed to get balance
+                        return fetch(`http://localhost:8081/account/${balanceAcctID}/balance`);
+                    }
+                });
+            } else {
+                throw new Error("Error checking account ID existence.");
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.text();
+            } else {
+                throw new Error("Error retrieving account balance.");
+            }
+        })
+        .then(balance => {
+            displayPopup(`Account Balance: \u20B9${balance}`);
+            document.getElementById("balanceAcctID").value = "";
+        })
+        .catch(error => {
+            console.error(error.message);
+            if (!popupDisplayed) {
+                displayPopup(`Error: ${error.message}`);
+                popupDisplayed = true; // Set flag to true
+            }
+        });
+}
+
+// Function to display popup message
+function displayPopup(message) {
+    // Remove any existing popups
+    const existingPopup = document.querySelector('.popup');
+    if (existingPopup) {
+        existingPopup.remove();
+    }
+
+    // Create popup container
+    const popup = document.createElement('div');
+    popup.classList.add('popup');
+    popup.innerHTML = `
+        <span class="close" onclick="closePopup(this)">&times;</span>
+        <div class="popup-content">
+            <p>${message}</p>
+            <button class="close-popup" onclick="closePopup(this)">Close</button>
+        </div>
+    `;
+
+    // Append popup to the body
+    document.body.appendChild(popup);
+
+    // Reset flag when popup is closed
+    popupDisplayed = false;
+
+    // CSS for the popup
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .popup {
+            color:black;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -20%);
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .popup-content {
+            color:black;
+            text-align: center;
+        }
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .close-popup {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .close-popup:hover {
+            background: #0056b3;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// Function to close the popup
+function closePopup(element) {
+    const popup = element.closest('.popup');
+    if (popup) {
+        popup.remove();
+    }
+}
+
+
+function deposit() {
+    const acctID = document.getElementById('depositAccID').value;
+    const amount = document.getElementById('depositAmt').value;
+
+    // Validate if account ID and amount are provided
+    if (!acctID.trim() || !amount.trim()) {
+        alert('Please enter both Account ID and Amount.');
+        return;
+    }
+
+    // Validate if amount is a positive number
+    if (isNaN(amount) || parseFloat(amount) <= 0) {
+        alert('Please enter a valid positive amount.');
+        return;
+    }
+
+    // Convert amount to number
+    const depositAmount = parseFloat(amount);
+
+    // Fetch to check if account ID exists
+    fetch(`http://localhost:8081/account/${acctID}`)
+        .then(response => {
+            if (response.status === 200 && response.headers.get('content-length') === '0') {
+                // Account ID doesn't exist, show error
+                throw new Error('Account ID does not exist.');
+            } else if (response.status !== 200) {
+                throw new Error('Error checking account ID existence.');
+            } else {
+                // Account ID exists, proceed to deposit
+                return fetch(`http://localhost:8081/account/${acctID}/deposit/${depositAmount}`, {
+                    method: 'PUT'
+                });
+            }
+        })
+        .then(response => {
+        displayResult9('<p>Amount deposited successfully.</p><button class="close-popup">Close</button>');
+        })
+        .catch(error => {
+           console.error('Error depositing amount:', error);
+            displayResult9('<p style="color: red;">Error depositing amount: ' + error.message + '</p><button class="close-popup">Close</button>');
+        });
+}
+function displayResult9(content) {
+    const resultContainer = document.createElement('div');
+    resultContainer.classList.add('result-popup');
+    resultContainer.innerHTML = content;
+
+    const closeButton = resultContainer.querySelector('.close-popup');
+    closeButton.addEventListener('click', () => {
+        resultContainer.remove();
+    });
+
+    document.body.appendChild(resultContainer);
+
+    // Clear the input field
+    document.getElementById('depositAccID').value = '';
+    document.getElementById('depositAmt').value = '';
+
+    // CSS for the popup
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .result-popup {
+            color: black;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -20%);
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            max-width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        .close-popup {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .close-popup:hover {
+            background: #0056b3;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+   function withdraw() {
+    const acctID = document.getElementById('withdrawacctID').value;
+    const amount = document.getElementById('withdrawAmt').value;
+
+    // Validate if account ID and amount are provided
+    if (!acctID.trim() || !amount.trim()) {
+        alert('Please enter both Account ID and Amount.');
+        return;
+    }
+
+    // Validate if amount is a positive number
+    if (isNaN(amount) || parseFloat(amount) <= 0) {
+        alert('Please enter a valid positive amount.');
+        return;
+    }
+
+    // Convert amount to number
+    const withdrawAmount = parseFloat(amount);
+
+    // Fetch to check if account ID exists
+    fetch(`http://localhost:8081/account/${acctID}`)
+        .then(response => {
+            if (response.status === 200 && response.headers.get('content-length') === '0') {
+                // Account ID doesn't exist, show error
+                throw new Error('Account ID does not exist.');
+            } else if (response.status !== 200) {
+                throw new Error('Error checking account ID existence.');
+            } else {
+                // Account ID exists, proceed to check balance
+                return fetch(`http://localhost:8081/account/${acctID}/balance`);
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.text();
+            } else {
+                throw new Error('Error retrieving account balance.');
+            }
+        })
+        .then(balance => {
+            const currentBalance = parseFloat(balance);
+            if (currentBalance >= withdrawAmount) {
+                // Proceed to withdraw
+                return fetch(`http://localhost:8081/account/${acctID}/withdraw/${withdrawAmount}`, {
+                    method: 'PUT'
+                });
+            } else {
+                throw new Error('Insufficient balance for the withdrawal.');
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                displayResult10('<p>Amount withdrawn successfully.</p><button class="close-popup">Close</button>');
+
+            } else {
+                throw new Error('Error withdrawing amount.');
+            }
+        })
+        .catch(error => {
+            console.error('Withdraw Error:', error.message);
+            displayResult10('<p style="color: red;">Withdraw Error: ' + error.message + '</p><button class="close-popup">Close</button>');
+        });
+}
+function displayResult10(content) {
+    const resultContainer = document.createElement('div');
+    resultContainer.classList.add('result-popup');
+    resultContainer.innerHTML = content;
+
+    const closeButton = resultContainer.querySelector('.close-popup');
+    closeButton.addEventListener('click', () => {
+        resultContainer.remove();
+    });
+
+    document.body.appendChild(resultContainer);
+
+    // Clear the input field
+    document.getElementById('withdrawacctID').value = ''; // Clear input fields
+    document.getElementById('withdrawAmt').value = '';
+
+    // CSS for the popup
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .result-popup {
+            color: black;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -20%);
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            max-width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        .close-popup {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .close-popup:hover {
+            background: #0056b3;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+
+  function transfer() {
+    const fromAcctID = document.getElementById('fromacctID').value;
+    const toAcctID = document.getElementById('toacctID').value;
+    const amount = document.getElementById('transferAmt').value;
+
+    // Validate if account IDs and amount are provided
+    if (!fromAcctID.trim() || !toAcctID.trim() || !amount.trim()) {
+        alert('Please enter From Account ID, To Account ID, and Amount.');
+        return;
+    }
+
+    // Validate if amount is a positive number
+    if (isNaN(amount) || parseFloat(amount) <= 0) {
+        alert('Please enter a valid positive amount.');
+        return;
+    }
+
+    // Validate that fromAcctID and toAcctID are not the same
+    if (fromAcctID === toAcctID) {
+        alert('From Account ID and To Account ID cannot be the same.');
+        return;
+    }
+
+    // Convert amount to number
+    const transferAmount = parseFloat(amount);
+
+    // Check if both account IDs exist
+    fetch(`http://localhost:8081/account/${fromAcctID}`)
+        .then(response => {
+            if (response.status === 200 && response.headers.get('content-length') !== '0') {
+                return fetch(`http://localhost:8081/account/${toAcctID}`);
+            } else {
+                throw new Error('From Account ID does not exist.');
+            }
+        })
+        .then(response => {
+            if (response.status === 200 && response.headers.get('content-length') !== '0') {
+                // Check balance of from account
+                return fetch(`http://localhost:8081/account/${fromAcctID}/balance`);
+            } else {
+                throw new Error('To Account ID does not exist.');
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.text();
+            } else {
+                throw new Error('Error retrieving from account balance.');
+            }
+        })
+        .then(balance => {
+            const currentBalance = parseFloat(balance);
+            if (currentBalance >= transferAmount) {
+                // Proceed to transfer
+                return fetch(`http://localhost:8081/account/${fromAcctID}/transfer/${toAcctID}/${transferAmount}`, {
+                    method: 'PUT'
+                });
+            } else {
+                throw new Error('Insufficient balance for the transfer.');
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                displayResult11('<p>Amount transferred successfully.</p><button class="close-popup">Close</button>');
+
+            } else {
+                throw new Error('Error transferring amount.');
+            }
+        })
+        .catch(error => {
+            console.error('Transfer Error:', error.message);
+            displayResult11('<p style="color: red;">Transfer Error: ' + error.message + '</p><button class="close-popup">Close</button>');
+
+        });
+}
+function displayResult11(content) {
+    const resultContainer = document.createElement('div');
+    resultContainer.classList.add('result-popup');
+    resultContainer.innerHTML = content;
+
+    const closeButton = resultContainer.querySelector('.close-popup');
+    closeButton.addEventListener('click', () => {
+        resultContainer.remove();
+    });
+
+    document.body.appendChild(resultContainer);
+
+    // Clear the input field
+    document.getElementById('fromacctID').value = ''; // Clear input fields
+    document.getElementById('toacctID').value = '';
+    document.getElementById('transferAmt').value = '';
+
+    // CSS for the popup
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .result-popup {
+            color: black;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -20%);
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            max-width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        .close-popup {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .close-popup:hover {
+            background: #0056b3;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+
+function deleteAccount() {
+    const acctID = document.getElementById('deleteacctID').value;
+    // Validate if account ID is provided
+    if (!acctID.trim()) {
+        alert('Please enter an Account ID.');
+        return;
+    }
+
+    fetch('http://localhost:8081/account/' + acctID)
+        .then(response => {
+            if (response.status === 200 && response.headers.get('content-length') === '0') {
+                throw new Error('Account ID does not exist');
+            }
+            return response.json();
+        })
+        .then(() => {
+            return fetch('http://localhost:8081/account/' + acctID, { method: 'DELETE' });
+        })
+        .then(() => {
+            displayResult8('<p>Customer deleted successfully.</p><button class="close-popup">Close</button>');
+        })
+        .catch(error => {
+            console.error('Error deleting customer:', error);
+            displayResult8('<p style="color: red;">Error deleting customer: ' + error.message + '</p><button class="close-popup">Close</button>');
+        });
+}
+
+function displayResult8(content) {
+    const resultContainer = document.createElement('div');
+    resultContainer.classList.add('result-popup');
+    resultContainer.innerHTML = content;
+
+    const closeButton = resultContainer.querySelector('.close-popup');
+    closeButton.addEventListener('click', () => {
+        resultContainer.remove();
+    });
+
+    document.body.appendChild(resultContainer);
+
+    // Clear the input field
+    document.getElementById('deleteacctID').value = '';
+
+    // CSS for the popup
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .result-popup {
+            color: black;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -20%);
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            max-width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        .close-popup {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .close-popup:hover {
+            background: #0056b3;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+
+   function getAccountInfo() {
+    const acctID = document.getElementById('infoacctID').value;
+    // Validate if account ID is provided
+    if (!acctID.trim()) {
+        alert('Please enter Account ID.');
+        return;
+    }
+    fetch('http://localhost:8081/account/' + acctID)
+        .then(response => {
+            if (response.status === 200 && response.headers.get('content-length') === '0') {
+                throw new Error('Account ID does not exist');
+            }
+            return response.json();
+        })
+        .then(account => {
+            const accountInfo = `
+                <h3>Account Info</h3>
+                <p>Account ID: ${account.acctID}</p>
+                <p>Balance: ${account.balance}</p>
+                <p>Status: ${account.acctStatus}</p>
+                <p>Holder Name: ${account.accountHolderName}</p>
+                <p>Account Type: ${account.accountType}</p>
+                <p>Branch: ${account.branch}</p>
+                <p>Interest Rate: ${account.interestRate}</p>
+                <button class="close-popup">Close</button>
+            `;
+            displayResult1(accountInfo);
+        })
+        .catch(error => {
+            console.error('Error fetching account info:', error);
+            displayResult1('<p style="color: red;">Account ID does not exist.</p><button class="close-popup">Close</button>');
+        });
+}
+
+function displayResult1(content) {
+    const resultContainer = document.createElement('div');
+    resultContainer.classList.add('result-popup');
+    resultContainer.innerHTML = content;
+
+    const closeButton = resultContainer.querySelector('.close-popup');
+    closeButton.addEventListener('click', () => {
+        resultContainer.remove();
+    });
+
+    document.body.appendChild(resultContainer);
+    // Clear the input field
+    document.getElementById('infoacctID').value = '';
+
+    // CSS for the popup
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .result-popup {
+            color:black;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -20%);
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .close-popup {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .close-popup:hover {
+            background: #0056b3;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+   function getCustomerInfo() {
+    const acctID = document.getElementById('custinfoacctID').value;
+    // Validate if account ID is provided
+    if (!acctID.trim()) {
+        alert('Please enter Account ID.');
+        return;
+    }
+    fetch('http://localhost:8081/customer/' + acctID)
+        .then(response => {
+            if (response.status === 200 && response.headers.get('content-length') === '0') {
+                throw new Error('Account ID does not exist');
+            }
+            return response.json();
+        })
+        .then(customer => {
+            const customerInfo = `
+                <h3>Customer Info</h3>
+                <p>Account ID: ${customer.acctID}</p>
+                <p>Name: ${customer.custName}</p>
+                <p>City: ${customer.city}</p>
+                <p>State: ${customer.state}</p>
+                <p>Country: ${customer.country}</p>
+                <p>Phone No: ${customer.phoneNo}</p>
+                <button class="close-popup">Close</button>
+            `;
+            displayResult3(customerInfo);
+        })
+        .catch(error => {
+            console.error('Error fetching customer info:', error);
+            displayResult3('<p style="color: red;">Account ID does not exist.</p><button class="close-popup">Close</button>');
+        });
+}
+
+function displayResult3(content) {
+    const resultContainer = document.createElement('div');
+    resultContainer.classList.add('result-popup');
+    resultContainer.innerHTML = content;
+
+    const closeButton = resultContainer.querySelector('.close-popup');
+    closeButton.addEventListener('click', () => {
+        resultContainer.remove();
+    });
+
+    document.body.appendChild(resultContainer);
+
+    // Clear the input field
+    document.getElementById('custinfoacctID').value = '';
+
+    // CSS for the popup
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .result-popup {
+            color:black;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -20%);
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .close-popup {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .close-popup:hover {
+            background: #0056b3;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+   function deleteCustomer() {
+    const custAcctID = document.getElementById('custdelacctID').value;
+    // Validate if account ID is provided
+    if (!custAcctID.trim()) {
+        alert('Please enter Account ID.');
+        return;
+    }
+    fetch('http://localhost:8081/customer/' + custAcctID)
+        .then(response => {
+            if (response.status === 200 && response.headers.get('content-length') === '0') {
+                throw new Error('Customer with Account ID does not exist');
+            }
+            return response.json();
+        })
+        .then(customerData => {
+            // Assuming customerData includes the single account ID directly
+            const accountID = customerData.accountID;
+
+            // Delete customer first
+            return fetch('http://localhost:8081/customer/' + custAcctID, { method: 'DELETE' })
+                .then(() => accountID); // Pass account ID to next then block
+        })
+        .then(accountID => {
+            // Delete associated account directly by its ID
+            return fetch('http://localhost:8081/account/' + custAcctID, { method: 'DELETE' });
+        })
+        .then(() => {
+            displayResult4('<p>Customer and associated account deleted successfully.</p><button class="close-popup">Close</button>');
+        })
+        .catch(error => {
+            console.error('Error deleting customer and associated account:', error);
+            displayResult4('<p style="color: red;">Error deleting customer and associated account: ' + error.message + '</p><button class="close-popup">Close</button>');
+        });
+}
+
+
+function displayResult4(content) {
+    const resultContainer = document.createElement('div');
+    resultContainer.classList.add('result-popup');
+    resultContainer.innerHTML = content;
+
+    const closeButton = resultContainer.querySelector('.close-popup');
+    closeButton.addEventListener('click', () => {
+        resultContainer.remove();
+    });
+
+    document.body.appendChild(resultContainer);
+
+    // Clear the input field
+    document.getElementById('custdelacctID').value = '';
+
+    // CSS for the popup
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .result-popup {
+            color: black;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -20%);
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            max-width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        .close-popup {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .close-popup:hover {
+            background: #0056b3;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+
+   function showAccountLogs() {
+    var acctID = document.getElementById('logacctID').value;
+    // Validate if account ID is provided
+    if (!acctID.trim()) {
+        alert('Please enter Account ID.');
+        return;
+    }
+    // First, check if the account ID exists
+    fetch('http://localhost:8081/account/' + acctID)
+        .then(response => {
+            if (response.status === 200 && response.headers.get('content-length') === '0') {
+                throw new Error('Account ID does not exist');
+            }
+            return response.json();
+        })
+        .then(account => {
+            // If account exists, show account logs
+            getAccountInfo(acctID);
+        })
+        .catch(error => {
+            console.error('Error fetching account info:', error);
+            displayResult5('<p style="color: red;">Account ID does not exist.</p><button class="close-popup">Close</button>');
+        });
+
+    // Function to fetch and display account information
+    function getAccountInfo(acctID) {
+        fetch('http://localhost:8081/account/' + acctID + '/logs')
+            .then(response => response.json())
+            .then(logs => {
+                var logsContent = '';
+                logs.forEach(log => {
+                    logsContent += `Log ID: ${log.logID}, Action: ${log.transacType}, Status: ${log.transacStatus}<br>`;
+                });
+
+                // Construct account info popup content
+                const accountInfo = `
+                    <h3>Account Info for Account ID: ${acctID}</h3>
+                    <div id="logsContainerPopup" class="logs-container-popup">
+                        ${logsContent}
+                    </div>
+                    <button class="close-popup">Close</button>
+                `;
+                displayResult5(accountInfo);
+            })
+            .catch(error => {
+                console.error('Error fetching logs:', error);
+                displayResult5('<p style="color: red;">Error fetching account logs.</p><button class="close-popup">Close</button>');
+            });
+    }
+}
+
+// Function to display result in a popup
+function displayResult5(content) {
+    const resultContainer = document.createElement('div');
+    resultContainer.classList.add('result-popup');
+    resultContainer.innerHTML = content;
+
+    const closeButton = resultContainer.querySelector('.close-popup');
+    closeButton.addEventListener('click', () => {
+        resultContainer.remove();
+    });
+
+    document.body.appendChild(resultContainer);
+    // Clear the input field
+    document.getElementById('logacctID').value = '';
+
+    // CSS for the popup
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .result-popup {
+            color:black;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -20%);
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .close-popup {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .close-popup:hover {
+            background: #0056b3;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+</script>
+</body>
+</html>
