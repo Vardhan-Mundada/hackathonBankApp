@@ -28,9 +28,9 @@
 //    @Override
 //    public void run(String... args) throws Exception {
 //        // Create customers
-//        Customer customer1 = new Customer(1, "Ravi Kumar", "Mumbai", "Maharashtra", "India", 9876543, "password1");
-//        Customer customer2 = new Customer(2, "Anita Sharma", "Delhi", "Delhi", "India", 9876543, "password2");
-//        Customer customer3 = new Customer(3, "Rahul Singh", "Bengaluru", "Karnataka", "India", 987654, "password3");
+//        Customer customer1 = new Customer(1, "Ravi Kumar", "Mumbai", "Maharashtra", "India", "9876543", "password1");
+//        Customer customer2 = new Customer(2, "Anita Sharma", "Delhi", "Delhi", "India", "9876543", "password2");
+//        Customer customer3 = new Customer(3, "Rahul Singh", "Bengaluru", "Karnataka", "India", "987654", "password3");
 //
 //        // Persist customers
 //        customerService.createCustomer(customer1);

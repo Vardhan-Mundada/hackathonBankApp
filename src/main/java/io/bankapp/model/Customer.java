@@ -12,14 +12,14 @@ public class Customer {
 	private String city;
 	private String state;
 	private String country;
-	private Long phoneNo;
+	private String phoneNo;
 	private String password;
 
 	public Customer() {
 
 	}
 
-	public Customer(int acctID, String custName, String city, String state, String country, Long phoneNo,
+	public Customer(int acctID, String custName, String city, String state, String country, String phoneNo,
 			String password) {
 		super();
 		this.acctID = acctID;
@@ -71,11 +71,11 @@ public class Customer {
 		this.country = country;
 	}
 
-	public Long getPhoneNo() {
+	public String getPhoneNo() {
 		return phoneNo;
 	}
 
-	public void setPhoneNo(Long phoneNo) {
+	public void setPhoneNo(String phoneNo) {
 		this.phoneNo = phoneNo;
 	}
 
